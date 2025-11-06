@@ -25,9 +25,9 @@ RUN chmod +x start.sh
 COPY mosquitto.conf /etc/mosquitto/mosquitto.conf
 
 # 🌐 Встановлюємо Cloudflare Tunnel
-RUN curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 \
-    -o /usr/local/bin/cloudflared && chmod +x /usr/local/bin/cloudflared
-
+RUN curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o /usr/local/bin/cloudflared \
+    && chmod +x /usr/local/bin/cloudflared
+    
 # 🔊 Відкриваємо порти MQTT і WebSocket
 EXPOSE 1883
 EXPOSE 10000
