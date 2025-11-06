@@ -8,4 +8,4 @@ python3 /app/bridge.py &
 
 sleep 3  # ще трохи для стабільності
 echo "🌐 Запуск Cloudflare Tunnel..."
-cloudflared tunnel run --token $TUNNEL_TOKEN
+cloudflared tunnel run mqtt-bridge
