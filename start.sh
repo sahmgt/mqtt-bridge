@@ -1,12 +1,12 @@
 #!/bin/bash
-# Запускаємо Mosquitto через WebSocket
+echo "Запуск Mosquitto..."
 mosquitto -c /etc/mosquitto/mosquitto.conf &
-# Запускаємо Cloudflare Tunnel
-cloudflared tunnel --url http://localhost:10000
-echo "🌀 Mosquitto WebSocket на порті 10000"
 
-# Коротка затримка для стабільності
+echo "Запуск bridge.py..."
+python3 /app/bridge.py &
+
+echo "Очікування 3 секунди для стабілізації..."
 sleep 3
 
-# Запускаємо bridge
-python3 /app/bridge.py
+echo "Запуск Cloudflare Tunnel..."
+cloudflared tunnel --url http://localhost:10000
