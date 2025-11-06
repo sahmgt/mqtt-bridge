@@ -8,5 +8,4 @@ python3 /app/bridge.py &
 
 sleep 3  # ще трохи для стабільності
 echo "🌐 Запуск Cloudflare Tunnel..."
-cloudflared tunnel --url http://localhost:10000
-
+cloudflared tunnel run --token $TUNNEL_TOKEN
