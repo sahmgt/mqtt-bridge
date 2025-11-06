@@ -4,7 +4,7 @@ FROM python:3.10-slim
 # 🕓 Робоча директорія
 WORKDIR /app
 
-# 🧩 Встановлюємо залежності системи
+# 🧩 Встановлюємо системні залежності
 RUN apt-get update && apt-get install -y \
     mosquitto \
     curl \
@@ -21,11 +21,14 @@ COPY . .
 # 🔧 Дозвіл на виконання скриптів
 RUN chmod +x start.sh
 
-# 🌐 Встановлюємо Cloudflare Tunnel
-RUN curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o /usr/local/bin/cloudflared \
-    && chmod +x /usr/local/bin/cloudflared
+# 🔹 Копіюємо власний mosquitto.conf
+COPY mosquitto.conf /etc/mosquitto/mosquitto.conf
 
-# 🔊 Відкриваємо потрібні порти
+# 🌐 Встановлюємо Cloudflare Tunnel
+RUN curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 \
+    -o /usr/local/bin/cloudflared && chmod +x /usr/local/bin/cloudflared
+
+# 🔊 Відкриваємо порти MQTT і WebSocket
 EXPOSE 1883
 EXPOSE 10000
 
