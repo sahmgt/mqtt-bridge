@@ -1,6 +1,8 @@
 #!/bin/bash
 # Запускаємо Mosquitto через WebSocket
 mosquitto -c /etc/mosquitto/mosquitto.conf &
+# Запускаємо Cloudflare Tunnel
+cloudflared tunnel --url http://localhost:10000
 echo "🌀 Mosquitto WebSocket на порті 10000"
 
 # Коротка затримка для стабільності
