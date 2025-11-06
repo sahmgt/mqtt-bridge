@@ -1,13 +1,17 @@
 #!/bin/bash
-# Спочатку запускаємо healthcheck-сервер
+# Запускаємо healthcheck одразу
 python3 /app/healthcheck.py &
+echo "Healthcheck HTTP running on port 10000"
 
-# Даємо Render'у побачити HTTP порт 10000
-sleep 5
+# Чекаємо 10 секунд — Render визначить вебпорт
+sleep 10
 
-# Тепер запускаємо MQTT брокер
+# Тепер запускаємо Mosquitto
 mosquitto -c /etc/mosquitto/mosquitto.conf &
+echo "Mosquitto started on port 1883"
 
-# І трохи пізніше сам bridge
+# Ще трохи пауза для стабільності
 sleep 3
+
+# Запускаємо bridge
 python3 /app/bridge.py
