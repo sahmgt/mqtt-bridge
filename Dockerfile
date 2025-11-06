@@ -1,26 +1,33 @@
-FROM python:3.11-slim
+# 🧱 Базовий образ
+FROM python:3.10-slim
 
-# Встановлюємо Mosquitto
-RUN apt-get update && \
-    apt-get install -y mosquitto mosquitto-clients && \
-    rm -rf /var/lib/apt/lists/*
-
-# Встановлюємо Python залежності
-COPY requirements.txt /tmp/
-RUN pip install --no-cache-dir -r /tmp/requirements.txt
-
-# Копіюємо файли
+# 🕓 Робоча директорія
 WORKDIR /app
-COPY mosquitto.conf /etc/mosquitto/mosquitto.conf
-COPY bridge.py /app/bridge.py
-COPY start.sh /app/start.sh
-RUN chmod +x /app/start.sh
 
-# WebSocket порт Render
-ENV PORT=10000
+# 🧩 Встановлюємо залежності системи
+RUN apt-get update && apt-get install -y \
+    mosquitto \
+    curl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# 🐍 Встановлюємо Python-залежності
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 📁 Копіюємо усі файли застосунку
+COPY . .
+
+# 🔧 Дозвіл на виконання скриптів
+RUN chmod +x start.sh
+
+# 🌐 Встановлюємо Cloudflare Tunnel
+RUN curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o /usr/local/bin/cloudflared \
+    && chmod +x /usr/local/bin/cloudflared
+
+# 🔊 Відкриваємо потрібні порти
+EXPOSE 1883
 EXPOSE 10000
-# Встановлюємо Cloudflare Tunnel
-RUN apt-get update && apt-get install -y curl
-RUN curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o /usr/local/bin/cloudflared
-RUN chmod +x /usr/local/bin/cloudflared
-CMD ["/app/start.sh"]
+
+# 🚀 Команда запуску
+CMD ["bash", "start.sh"]
