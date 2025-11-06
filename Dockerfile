@@ -22,6 +22,5 @@ ENV PORT=10000
 
 # Експонуємо обидва порти: HTTP (для Render) і MQTT
 EXPOSE 10000
-EXPOSE 1883
 
 CMD ["/app/start.sh"]
